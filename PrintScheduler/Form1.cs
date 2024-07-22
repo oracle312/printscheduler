@@ -12,9 +12,12 @@ using Microsoft.Win32.TaskScheduler;
 using System.Net;
 using System.Net.Http;
 using System.IO;
+using System.Runtime.InteropServices;
+using WinHttp;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace PrintScheduler
-{ 
+{
     public partial class Form1 : Form
     {
         public Form1()
@@ -24,7 +27,9 @@ namespace PrintScheduler
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            groupBox2.Enabled = false;
+            btn_schedule.Enabled = false;
+            btn_schedule.Text = "초기화를 먼저 눌러주세요 !!";
         }
 
         private void btn_setup_Click(object sender, EventArgs e)
@@ -43,8 +48,8 @@ namespace PrintScheduler
                     td.Principal.LogonType = TaskLogonType.InteractiveToken;
                     td.Principal.RunLevel = TaskRunLevel.Highest;
                     td.Triggers.Add(login);
-                    
-                    
+
+
 
                     //조건
                     td.Settings.MultipleInstances = TaskInstancesPolicy.IgnoreNew;
@@ -71,7 +76,7 @@ namespace PrintScheduler
                     //등록
                     ts.RootFolder.RegisterTaskDefinition("오토 프린트", td);
 
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -85,10 +90,10 @@ namespace PrintScheduler
             string executablePath = @"C:\DIO-SYSTEM\PrintJob.exe";
             string schedule = "WEEKLY";
             string startDay = "MON";
-            string startTime = "13:38"; 
+            string startTime = "13:38";
 
             string schtasksCommand = $"/create /tn \"{taskName}\" /tr \"{executablePath}\" /sc {schedule} /d {startDay} /st {startTime} /f";
-
+            
             try
             {
                 ProcessStartInfo processInfo = new ProcessStartInfo("schtasks", schtasksCommand);
@@ -103,19 +108,47 @@ namespace PrintScheduler
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
 
-                
+
                 MessageBox.Show(output);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
-                
+
             }
         }
 
         private void btn_init_Click(object sender, EventArgs e)
         {
             string folder_path = @"C:\DIO-SYSTEM";
+            DirectoryInfo folder = new DirectoryInfo(folder_path);
+            if(folder.Exists == false)
+            {
+                folder.Create();
+            }
+            string url = "http://oracle312.dothome.co.kr/DIOSYSTEM/Print/PrintJob.exe";
+            string image_url = "http://oracle312.dothome.co.kr/DIOSYSTEM/Print/print.jpg";
+            string outputPath = "C:\\DIO-SYSTEM\\PrintJob.exe";
+            string imageOutputPath = "c:\\DIO-SYSTEM\\print.jpg";
+
+            try
+            {
+                DownloadFile(url, outputPath);
+                DownloadFile(image_url, imageOutputPath);
+                groupBox2.Enabled = true;
+                btn_schedule.Enabled = true;
+                btn_schedule.Text = "등록하기";
+                btn_init.Enabled = false;
+                MessageBox.Show("세팅 완료 !!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+                //Console.WriteLine("Error downloading file: " + ex.Message);
+            }
+
+
+            /*string folder_path = @"C:\DIO-SYSTEM";
             DirectoryInfo di = new DirectoryInfo(folder_path);
 
             if(di.Exists == false)
@@ -142,6 +175,95 @@ namespace PrintScheduler
             File.WriteAllText(dest, content);
             //File.WriteAllText(dest2, content2);
             MessageBox.Show("세팅 완료 !!");
+        }*/
+        }
+
+        static void DownloadFile(string url, string outputPath)
+        {
+            WinHttpRequest request = new WinHttpRequest();
+            request.Open("GET", url, false);
+            request.Send();
+
+            if (request.Status == 200)
+            {
+                byte[] responseBody = (byte[])request.ResponseBody;
+                File.WriteAllBytes(outputPath, responseBody);
+            }
+            else
+            {
+                throw new Exception("HTTP error: " + request.Status);
+            }
+        }
+
+        static void CreateTask(string taskName, string executablePath, TaskCompatibility compatibility)
+        {  
+            using (TaskService ts = new TaskService())
+            {
+                
+                // 작업 정의 생성
+                TaskDefinition td = ts.NewTask();
+                td.RegistrationInfo.Description = "잉크막힘을 방지하기위한 주기적 인쇄 스케쥴러";
+
+                // 매주 실행 트리거 설정 (여기서는 일요일 오전 9시에 실행)
+                WeeklyTrigger weeklyTrigger = new WeeklyTrigger
+                {
+                    StartBoundary = DateTime.Today + TimeSpan.FromHours(10) + TimeSpan.FromMinutes(10), // 9 AM
+                    DaysOfWeek = DaysOfTheWeek.Monday
+                };
+                td.Triggers.Add(weeklyTrigger);
+
+                // 작업 설정
+                td.Actions.Add(new ExecAction(executablePath, null, null));
+
+                // Windows 버전에 따른 호환성 설정
+                td.Settings.Compatibility = compatibility;
+
+                // 작업 생성 또는 업데이트
+                ts.RootFolder.RegisterTaskDefinition(taskName, td);
+                Console.WriteLine($"Task '{taskName}' has been created or updated.");
+            }
+        }
+
+        private void btn_schedule_Click(object sender, EventArgs e)
+        {
+            string taskName = "DIOSYSTEM";
+            string executablePath = "C:\\DIO-SYSTEM\\PrintJob.exe";
+            if (rbtn_xp.Checked)
+            {
+                CreateTask(taskName, executablePath, TaskCompatibility.V1);
+                MessageBox.Show("등록완료 !!");
+            }
+            else if (rbtn_vista.Checked)
+            {
+                CreateTask(taskName, executablePath, TaskCompatibility.V2);
+                MessageBox.Show("등록완료 !!");
+            }
+            else if (rbtn_seven.Checked)
+            {
+                CreateTask(taskName, executablePath, TaskCompatibility.V2_1);
+                MessageBox.Show("등록완료 !!");
+            }
+            else if (rbtn_eight.Checked)
+            {
+                CreateTask(taskName, executablePath, TaskCompatibility.V2_2);
+                MessageBox.Show("등록완료 !!");
+            }
+            else if (rbtn_ten.Checked)
+            {
+                CreateTask(taskName, executablePath, TaskCompatibility.V2_3);
+                MessageBox.Show("등록완료 !!");
+            }
+        }
+
+        private void 프로그램정보ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Info info = new Info();
+            info.ShowDialog();
+        }
+
+        private void 수동업데이트하기ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("현재 사용 불가");
         }
     }
 }

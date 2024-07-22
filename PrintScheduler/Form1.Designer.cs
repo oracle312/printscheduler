@@ -30,13 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btn_start = new System.Windows.Forms.Button();
+            this.btn_schedule = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.rbtn_ten = new System.Windows.Forms.RadioButton();
             this.rbtn_eight = new System.Windows.Forms.RadioButton();
             this.rbtn_seven = new System.Windows.Forms.RadioButton();
             this.rbtn_vista = new System.Windows.Forms.RadioButton();
             this.rbtn_xp = new System.Windows.Forms.RadioButton();
+            this.cbox_time = new System.Windows.Forms.ComboBox();
+            this.cbox_day = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btn_start = new System.Windows.Forms.Button();
             this.btn_setup = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.파일ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +49,7 @@
             this.업데이트ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_init = new System.Windows.Forms.Button();
             this.lbl_version = new System.Windows.Forms.Label();
+            this.수동업데이트하기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -51,25 +57,25 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btn_start);
+            this.groupBox1.Controls.Add(this.btn_schedule);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(4, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(345, 210);
+            this.groupBox1.Size = new System.Drawing.Size(345, 206);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
-            // btn_start
+            // btn_schedule
             // 
-            this.btn_start.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_start.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.btn_start.Location = new System.Drawing.Point(8, 172);
-            this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(328, 26);
-            this.btn_start.TabIndex = 3;
-            this.btn_start.Text = "등록";
-            this.btn_start.UseVisualStyleBackColor = true;
-            this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
+            this.btn_schedule.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_schedule.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.btn_schedule.Location = new System.Drawing.Point(8, 172);
+            this.btn_schedule.Name = "btn_schedule";
+            this.btn_schedule.Size = new System.Drawing.Size(328, 26);
+            this.btn_schedule.TabIndex = 10;
+            this.btn_schedule.Text = "등록";
+            this.btn_schedule.UseVisualStyleBackColor = true;
+            this.btn_schedule.Click += new System.EventHandler(this.btn_schedule_Click);
             // 
             // groupBox2
             // 
@@ -140,6 +146,67 @@
             this.rbtn_xp.Text = "Windows XP, Windows 2000, Windows Server 2003";
             this.rbtn_xp.UseVisualStyleBackColor = true;
             // 
+            // cbox_time
+            // 
+            this.cbox_time.FormattingEnabled = true;
+            this.cbox_time.Items.AddRange(new object[] {
+            "09시",
+            "10시",
+            "11시",
+            "12시",
+            "13시",
+            "14시",
+            "15시",
+            "16시"});
+            this.cbox_time.Location = new System.Drawing.Point(944, 296);
+            this.cbox_time.Name = "cbox_time";
+            this.cbox_time.Size = new System.Drawing.Size(87, 23);
+            this.cbox_time.TabIndex = 9;
+            // 
+            // cbox_day
+            // 
+            this.cbox_day.FormattingEnabled = true;
+            this.cbox_day.Items.AddRange(new object[] {
+            "월요일",
+            "화요일",
+            "수요일",
+            "목요일",
+            "금요일"});
+            this.cbox_day.Location = new System.Drawing.Point(769, 296);
+            this.cbox_day.Name = "cbox_day";
+            this.cbox_day.Size = new System.Drawing.Size(87, 23);
+            this.cbox_day.TabIndex = 8;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(872, 299);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 15);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "시간 설정 :";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(703, 299);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 15);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "요일 설정 :";
+            // 
+            // btn_start
+            // 
+            this.btn_start.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_start.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.btn_start.Location = new System.Drawing.Point(689, 363);
+            this.btn_start.Name = "btn_start";
+            this.btn_start.Size = new System.Drawing.Size(328, 26);
+            this.btn_start.TabIndex = 3;
+            this.btn_start.Text = "등록";
+            this.btn_start.UseVisualStyleBackColor = true;
+            this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
+            // 
             // btn_setup
             // 
             this.btn_setup.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -159,7 +226,7 @@
             this.업데이트ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1110, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(356, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -176,9 +243,12 @@
             this.프로그램정보ToolStripMenuItem.Name = "프로그램정보ToolStripMenuItem";
             this.프로그램정보ToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.프로그램정보ToolStripMenuItem.Text = "프로그램 정보";
+            this.프로그램정보ToolStripMenuItem.Click += new System.EventHandler(this.프로그램정보ToolStripMenuItem_Click);
             // 
             // 업데이트ToolStripMenuItem
             // 
+            this.업데이트ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.수동업데이트하기ToolStripMenuItem});
             this.업데이트ToolStripMenuItem.Name = "업데이트ToolStripMenuItem";
             this.업데이트ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.업데이트ToolStripMenuItem.Text = "업데이트";
@@ -187,7 +257,7 @@
             // 
             this.btn_init.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btn_init.ForeColor = System.Drawing.Color.Red;
-            this.btn_init.Location = new System.Drawing.Point(4, 243);
+            this.btn_init.Location = new System.Drawing.Point(4, 239);
             this.btn_init.Name = "btn_init";
             this.btn_init.Size = new System.Drawing.Size(345, 25);
             this.btn_init.TabIndex = 2;
@@ -204,15 +274,27 @@
             this.lbl_version.TabIndex = 3;
             this.lbl_version.Text = "label1";
             // 
+            // 수동업데이트하기ToolStripMenuItem
+            // 
+            this.수동업데이트하기ToolStripMenuItem.Name = "수동업데이트하기ToolStripMenuItem";
+            this.수동업데이트하기ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.수동업데이트하기ToolStripMenuItem.Text = "수동 업데이트 하기";
+            this.수동업데이트하기ToolStripMenuItem.Click += new System.EventHandler(this.수동업데이트하기ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1110, 495);
+            this.ClientSize = new System.Drawing.Size(356, 273);
+            this.Controls.Add(this.cbox_time);
+            this.Controls.Add(this.btn_start);
             this.Controls.Add(this.lbl_version);
+            this.Controls.Add(this.cbox_day);
             this.Controls.Add(this.btn_init);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btn_setup);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -252,6 +334,12 @@
         private System.Windows.Forms.RadioButton rbtn_xp;
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Label lbl_version;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbox_time;
+        private System.Windows.Forms.ComboBox cbox_day;
+        private System.Windows.Forms.Button btn_schedule;
+        private System.Windows.Forms.ToolStripMenuItem 수동업데이트하기ToolStripMenuItem;
     }
 }
 
