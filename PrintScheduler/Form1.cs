@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
+using System.Net;
+using System.Net.Http;
+using System.IO;
 
 namespace PrintScheduler
 { 
@@ -73,6 +77,71 @@ namespace PrintScheduler
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void btn_start_Click(object sender, EventArgs e)
+        {
+            string taskName = "DIOSYSTEMprint";
+            string executablePath = @"C:\DIO-SYSTEM\PrintJob.exe";
+            string schedule = "WEEKLY";
+            string startDay = "MON";
+            string startTime = "13:38"; 
+
+            string schtasksCommand = $"/create /tn \"{taskName}\" /tr \"{executablePath}\" /sc {schedule} /d {startDay} /st {startTime} /f";
+
+            try
+            {
+                ProcessStartInfo processInfo = new ProcessStartInfo("schtasks", schtasksCommand);
+                processInfo.RedirectStandardOutput = true;
+                processInfo.UseShellExecute = false;
+                processInfo.CreateNoWindow = true;
+
+                Process process = new Process();
+                process.StartInfo = processInfo;
+                process.Start();
+
+                string output = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+
+                
+                MessageBox.Show(output);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+                
+            }
+        }
+
+        private void btn_init_Click(object sender, EventArgs e)
+        {
+            string folder_path = @"C:\DIO-SYSTEM";
+            DirectoryInfo di = new DirectoryInfo(folder_path);
+
+            if(di.Exists == false)
+            {
+                di.Create();
+            }
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead("http://oracle312.dothome.co.kr/print_ver.txt");
+            StreamReader reader = new StreamReader(stream);
+            string readText = reader.ReadToEnd();
+
+            String url = "http://oracle312.dothome.co.kr/PrintJob.exe";
+            String url2 = "http://oracle312.dothome.co.kr/print.jpg";
+            string content;
+            string content2;
+            using (HttpClient clients = new HttpClient())
+            {
+                content = clients.GetStringAsync(url).Result;
+                //content2 = clients.GetStringAsync(url2).Result;
+            }
+
+            string dest = @"C:\DIO-SYSTEM\PrintJob.exe";
+            string dest2 = @"C:\DIO-SYSTEM\print.jpg";
+            File.WriteAllText(dest, content);
+            //File.WriteAllText(dest2, content2);
+            MessageBox.Show("세팅 완료 !!");
         }
     }
 }
