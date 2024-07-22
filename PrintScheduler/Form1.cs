@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
 
 namespace PrintScheduler
-{
+{ 
     public partial class Form1 : Form
     {
         public Form1()
