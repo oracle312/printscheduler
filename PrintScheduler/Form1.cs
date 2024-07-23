@@ -126,8 +126,8 @@ namespace PrintScheduler
             {
                 folder.Create();
             }
-            string url = "http://oracle312.dothome.co.kr/DIOSYSTEM/Print/PrintJob.exe";
-            string image_url = "http://oracle312.dothome.co.kr/DIOSYSTEM/Print/print.jpg";
+            string url = "";
+            string image_url = "";
             string outputPath = "C:\\DIO-SYSTEM\\PrintJob.exe";
             string imageOutputPath = "c:\\DIO-SYSTEM\\print.jpg";
 
